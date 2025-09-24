@@ -668,7 +668,7 @@ Traceback (most recent call last):
 KeyboardInterrupt
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:root:Exception while sending command.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:py4j.clientserver:Exception occurred while shutting down connection
 Traceback (most recent call last):
   File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 535, in send_command
     answer = smart_decode(self.stream.readline()[:-1])
@@ -684,9 +684,19 @@ Traceback (most recent call last):
   File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py&quot;, line 1038, in send_command
     response = connection.send_command(command)
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 566, in send_command
-    raise Py4JNetworkError(
-py4j.protocol.Py4JNetworkError: Error while sending or receiving
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 563, in send_command
+    logger.info(&quot;Error while receiving.&quot;, exc_info=True)
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\logging\__init__.py&quot;, line 1479, in info
+    def info(self, msg, *args, **kwargs):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 503, in shutdown_socket
+    self.socket.sendall(&quot;z\n&quot;.encode(&quot;utf-8&quot;))
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:py4j.clientserver:Exception occurred while shutting down connection
@@ -718,6 +728,101 @@ Traceback (most recent call last):
   File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 503, in shutdown_socket
     self.socket.sendall(&quot;z\n&quot;.encode(&quot;utf-8&quot;))
 ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ConnectionResetError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py:535,</span> in <span class="ni">ClientServerConnection.send_command</span><span class="nt">(self, command)</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">535</span>     <span class="n">answer</span> <span class="o">=</span> <span class="n">smart_decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Answer received: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\socket.py:718,</span> in <span class="ni">SocketIO.readinto</span><span class="nt">(self, b)</span>
+<span class="g g-Whitespace">    </span><span class="mi">717</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">718</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv_into</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">719</span> <span class="k">except</span> <span class="n">timeout</span><span class="p">:</span>
+
+<span class="ne">ConnectionResetError</span>: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">26</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">weightCol</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>     <span class="mi">22</span>     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">26</span> <span class="n">rf_model</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_w</span><span class="p">)</span>                 <span class="c1"># &lt;&lt;&lt; aquí</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="n">t_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\base.py:203,</span> in <span class="ni">Estimator.fit</span><span class="nt">(self, dataset, params)</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">203</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>         <span class="s2">&quot;Params must be either a param map or a list/tuple of param maps, &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>         <span class="s2">&quot;but got </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\util.py:164,</span> in <span class="ni">try_remote_fit.&lt;locals&gt;.wrapped</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">162</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copyValues</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">164</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\wrapper.py:411,</span> in <span class="ni">JavaEstimator._fit</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span> <span class="nd">@try_remote_fit</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span> <span class="k">def</span><span class="w"> </span><span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JM</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">411</span>     <span class="n">java_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_java</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_model</span><span class="p">(</span><span class="n">java_model</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copyValues</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\wrapper.py:407,</span> in <span class="ni">JavaEstimator._fit_java</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_java_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transfer_params_to_java</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">407</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_java_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">_jdf</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1361,</span> in <span class="ni">JavaMember.__call__</span><span class="nt">(self, *args)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1354</span> <span class="n">args_command</span><span class="p">,</span> <span class="n">temp_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1356</span> <span class="n">command</span> <span class="o">=</span> <span class="n">proto</span><span class="o">.</span><span class="n">CALL_COMMAND_NAME</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1357</span>     <span class="bp">self</span><span class="o">.</span><span class="n">command_header</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1358</span>     <span class="n">args_command</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1359</span>     <span class="n">proto</span><span class="o">.</span><span class="n">END_COMMAND_PART</span>
+<span class="ne">-&gt; </span><span class="mi">1361</span> <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1362</span> <span class="n">return_value</span> <span class="o">=</span> <span class="n">get_return_value</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1363</span>     <span class="n">answer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1365</span> <span class="k">for</span> <span class="n">temp_arg</span> <span class="ow">in</span> <span class="n">temp_args</span><span class="p">:</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1038,</span> in <span class="ni">GatewayClient.send_command</span><span class="nt">(self, command, retry, binary)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1036</span> <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1037</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1038</span>     <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1039</span>     <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1040</span>         <span class="k">return</span> <span class="n">response</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_connection_guard</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py:563,</span> in <span class="ni">ClientServerConnection.send_command</span><span class="nt">(self, command)</span>
+<span class="g g-Whitespace">    </span><span class="mi">560</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">561</span>                     <span class="n">proto</span><span class="o">.</span><span class="n">ERROR_RETURN_MESSAGE</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">562</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">563</span>     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Error while receiving.&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">564</span>     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">Py4JNetworkError</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">when</span> <span class="o">==</span> <span class="n">proto</span><span class="o">.</span><span class="n">EMPTY_RESPONSE</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">565</span>         <span class="k">raise</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\logging\__init__.py:1479,</span> in <span class="ni">Logger.info</span><span class="nt">(self, msg, *args, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1476</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1477</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1479</span> <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1480</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1481</span><span class="sd">     Log &#39;msg % args&#39; with severity &#39;INFO&#39;.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1482</span><span class="sd"> </span>
+<span class="sd">   (...)   1486     logger.info(&quot;Houston, we have a %s&quot;, &quot;interesting problem&quot;, exc_info=True)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1487</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1488</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">INFO</span><span class="p">):</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
 </div>
 </div>

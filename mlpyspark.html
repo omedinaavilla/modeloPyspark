@@ -1,0 +1,1089 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Modelado utilizando Pyspark &#8212; Machine Learning con PySpark vs Scikit-learn</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'mlpyspark';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparación de Resultados: PySpark vs Scikit-learn" href="reflexion.html" />
+    <link rel="prev" title="1. IMPORTACIÓN DE LIBRERÍAS PARA MODELADO" href="modScikit.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Machine Learning con PySpark vs Scikit-learn - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Machine Learning con PySpark vs Scikit-learn - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Miniproyecto Random forest en Pyspark
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="edaleanding.html">1. Contexto</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="modScikit.html">1. IMPORTACIÓN DE LIBRERÍAS PARA MODELADO</a></li>
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Modelado utilizando Pyspark</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="reflexion.html">Comparación de Resultados: PySpark vs Scikit-learn</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmlpyspark.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/mlpyspark.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modelado utilizando Pyspark</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Modelado utilizando Pyspark</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preparacion-y-division-de-los-datos">2. Preparación y División de los Datos</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-caracteristicas">2.1. Selección de Características</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#division-estratificada-de-datos-80-20">2.2. División Estratificada de Datos (80/20)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-de-los-datos">2.3. Preprocesamiento de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo-y-tiempo-del-modelo">3.1. Entrenamiento del modelo y tiempo del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion-y-curva-auc">3.2 Matriz de confusión y Curva-AUC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-resultados">Interpretación de resultados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">1. Matriz de Confusión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-de-clasificacion">2. Métricas de Clasificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc-auc">3. Curva ROC – AUC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modelado-utilizando-pyspark">
+<h1>Modelado utilizando Pyspark<a class="headerlink" href="#modelado-utilizando-pyspark" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="preparacion-y-division-de-los-datos">
+<h1>2. Preparación y División de los Datos<a class="headerlink" href="#preparacion-y-division-de-los-datos" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># 1) SparkSession</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;LendingClubRF&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="c1"># 2) Ruta del parquet (ajústala si el nombre/carpeta cambia)</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;leanding_cleaned.parquet&quot;</span>   <span class="c1"># Ruta relativa</span>
+
+<span class="c1"># (opcional) verificar que exista en disco</span>
+<span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">PATH</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;No encontré el archivo: </span><span class="si">{</span><span class="n">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># 3) Leer parquet</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="n">PATH</span><span class="p">)</span>
+
+<span class="c1"># 4) Chequeo rápido</span>
+<span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Filas:&quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>root
+ |-- loan_amnt: double (nullable = true)
+ |-- int_rate: double (nullable = true)
+ |-- fico_range_high: double (nullable = true)
+ |-- emp_length: double (nullable = true)
+ |-- annual_inc: double (nullable = true)
+ |-- purpose: string (nullable = true)
+ |-- home_ownership: string (nullable = true)
+ |-- dti: double (nullable = true)
+ |-- addr_state: string (nullable = true)
+ |-- default: long (nullable = true)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---------+--------+---------------+----------+----------+------------------+--------------+-----+----------+-------+
+|loan_amnt|int_rate|fico_range_high|emp_length|annual_inc|purpose           |home_ownership|dti  |addr_state|default|
++---------+--------+---------------+----------+----------+------------------+--------------+-----+----------+-------+
+|3600.0   |13.99   |679.0          |10.0      |55000.0   |debt_consolidation|MORTGAGE      |5.91 |PA        |0      |
+|24700.0  |11.99   |719.0          |10.0      |65000.0   |small_business    |MORTGAGE      |16.06|SD        |0      |
+|20000.0  |10.78   |699.0          |10.0      |63000.0   |home_improvement  |MORTGAGE      |10.78|IL        |0      |
+|10400.0  |22.45   |699.0          |3.0       |104433.0  |major_purchase    |MORTGAGE      |25.37|PA        |0      |
+|11950.0  |13.44   |694.0          |4.0       |34000.0   |debt_consolidation|RENT          |10.2 |GA        |0      |
++---------+--------+---------------+----------+----------+------------------+--------------+-----+----------+-------+
+only showing top 5 rows
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filas: 1345310
+</pre></div>
+</div>
+</div>
+</div>
+<section id="seleccion-de-caracteristicas">
+<h2>2.1. Selección de Características<a class="headerlink" href="#seleccion-de-caracteristicas" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definimos las columnas que usaremos en el modelo</span>
+<span class="n">model_features</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fico_range_high&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;emp_length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dti&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;addr_state&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Variable objetivo</span>
+<span class="n">target_col</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+
+<span class="c1"># DataFrame solo con features + target</span>
+<span class="n">df_model</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">model_features</span> <span class="o">+</span> <span class="p">[</span><span class="n">target_col</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="division-estratificada-de-datos-80-20">
+<h2>2.2. División Estratificada de Datos (80/20)<a class="headerlink" href="#division-estratificada-de-datos-80-20" title="Link to this heading">#</a></h2>
+<p>Dividimos los datos en conjuntos de entrenamiento y prueba.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dividir en entrenamiento (80%) y prueba (20%)</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">df_model</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tamaño entrenamiento:&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tamaño prueba:&quot;</span><span class="p">,</span> <span class="n">test</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tamaño entrenamiento: 1076235
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tamaño prueba: 269075
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocesamiento-de-los-datos">
+<h2>2.3. Preprocesamiento de los datos<a class="headerlink" href="#preprocesamiento-de-los-datos" title="Link to this heading">#</a></h2>
+<p>Se separaron las variables numéricas y categóricas, se imputaron los valores faltantes de las numéricas usando la mediana, y las categóricas fueron transformadas mediante indexación y codificación one-hot.</p>
+<p>Todas las variables procesadas se integraron en un único vector de características (features) con el fin de que los algoritmos de PySpark ML puedan utilizarlas directamente en el entrenamiento y la evaluación de los modelos. Para asegurar consistencia, estos pasos se encapsularon en un pipeline aplicado tanto al conjunto de entrenamiento como al de prueba.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringType</span><span class="p">,</span> <span class="n">BooleanType</span><span class="p">,</span> <span class="n">IntegerType</span><span class="p">,</span> <span class="n">LongType</span><span class="p">,</span> <span class="n">FloatType</span><span class="p">,</span> <span class="n">DoubleType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.feature</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIndexer</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">VectorAssembler</span><span class="p">,</span> <span class="n">Imputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="c1"># --- columnas numéricas y categóricas (según tu df_model) ---</span>
+<span class="n">num_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">IntegerType</span><span class="p">,</span> <span class="n">LongType</span><span class="p">,</span> <span class="n">FloatType</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">)</span>
+<span class="n">num_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">df_model</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">dataType</span><span class="p">,</span> <span class="n">num_types</span><span class="p">)</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;default&quot;</span><span class="p">]</span>
+<span class="n">cat_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df_model</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]]</span>
+
+<span class="c1"># --- transformadores ---</span>
+<span class="n">imp_num</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">,</span>
+                  <span class="n">inputCols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span>
+                  <span class="n">outputCols</span><span class="o">=</span><span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;_imp&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_cols</span><span class="p">])</span>
+
+<span class="n">idx_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;_idx&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">]</span>
+<span class="n">ohe_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;_ohe&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">]</span>
+
+<span class="n">indexer</span> <span class="o">=</span> <span class="n">StringIndexer</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">cat_cols</span><span class="p">,</span> <span class="n">outputCols</span><span class="o">=</span><span class="n">idx_cols</span><span class="p">,</span> <span class="n">handleInvalid</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">)</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">idx_cols</span><span class="p">,</span> <span class="n">outputCols</span><span class="o">=</span><span class="n">ohe_cols</span><span class="p">,</span> <span class="n">dropLast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">feat_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;_imp&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_cols</span><span class="p">]</span> <span class="o">+</span> <span class="n">ohe_cols</span>
+<span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span><span class="n">inputCols</span><span class="o">=</span><span class="n">feat_cols</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+
+<span class="c1"># --- pipeline SOLO de preprocesamiento ---</span>
+<span class="n">prep_pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="p">[</span><span class="n">imp_num</span><span class="p">,</span> <span class="n">indexer</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">assembler</span><span class="p">])</span>
+
+<span class="c1"># fit en TRAIN y transformar ambos</span>
+<span class="n">prep_model</span> <span class="o">=</span> <span class="n">prep_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="n">train_prep</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="n">test_prep</span>  <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+<span class="c1"># chequeo rápido</span>
+<span class="n">train_prep</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+-----------------------------------------------------------------------------+-------+
+|features                                                                     |default|
++-----------------------------------------------------------------------------+-------+
+|(77,[0,1,2,3,4,5,9,20,28],[500.0,9.76,744.0,7.0,59000.0,22.17,1.0,1.0,1.0])  |0      |
+|(77,[0,1,2,3,4,5,12,20,30],[500.0,10.46,694.0,3.0,26000.0,14.17,1.0,1.0,1.0])|0      |
+|(77,[0,1,2,4,5,15,20,26],[500.0,10.71,684.0,7904.04,3.04,1.0,1.0,1.0])       |0      |
++-----------------------------------------------------------------------------+-------+
+only showing top 3 rows
+</pre></div>
+</div>
+</div>
+</div>
+<p>Aqui se puede observar las 3 primeras filas del vector features.</p>
+</section>
+<section id="entrenamiento-del-modelo-y-tiempo-del-modelo">
+<h2>3.1. Entrenamiento del modelo y tiempo del modelo<a class="headerlink" href="#entrenamiento-del-modelo-y-tiempo-del-modelo" title="Link to this heading">#</a></h2>
+<p>Para el entrenamiento de este modelo, es importante mencionar que se usaron los mejores hiperparametros encontrados en el modelado con scikit-learn.</p>
+<p>Además, para abordar el problema de desbalance de clases, se asignaron pesos diferenciados en el entrenamiento, otorgando mayor relevancia a la clase minoritaria con el fin de mejorar el desempeño del modelo en su detección</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">when</span><span class="p">,</span> <span class="n">col</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.classification</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinaryClassificationEvaluator</span><span class="p">,</span> <span class="n">MulticlassClassificationEvaluator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># 1) Pesos</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]:</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">train_prep</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()}</span>
+<span class="n">neg_n</span><span class="p">,</span> <span class="n">pos_n</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ratio</span> <span class="o">=</span> <span class="n">neg_n</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">pos_n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">train_w</span> <span class="o">=</span> <span class="n">train_prep</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+                                <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">))</span>
+<span class="n">test_w</span>  <span class="o">=</span> <span class="n">test_prep</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+                               <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">))</span>
+
+<span class="c1"># 2) Modelo (usa los *_w!)</span>
+<span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+    <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span>
+    <span class="n">weightCol</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+    <span class="n">numTrees</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">maxDepth</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">maxBins</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">subsamplingRate</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">featureSubsetStrategy</span><span class="o">=</span><span class="s2">&quot;sqrt&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">rf_model</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_w</span><span class="p">)</span>                 <span class="c1"># &lt;&lt;&lt; aquí</span>
+<span class="n">t_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+
+<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">rf_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_w</span><span class="p">)</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>  <span class="c1"># &lt;&lt;&lt; y aquí</span>
+<span class="n">pred</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">t_pred</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t1</span>
+
+<span class="c1"># 3) Métricas</span>
+<span class="n">bin_eval</span> <span class="o">=</span> <span class="n">BinaryClassificationEvaluator</span><span class="p">(</span><span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">rawPredictionCol</span><span class="o">=</span><span class="s2">&quot;rawPrediction&quot;</span><span class="p">,</span> <span class="n">metricName</span><span class="o">=</span><span class="s2">&quot;areaUnderROC&quot;</span><span class="p">)</span>
+<span class="n">multi_eval</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span><span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+
+<span class="n">auc</span> <span class="o">=</span> <span class="n">bin_eval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">multi_eval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="p">{</span><span class="n">multi_eval</span><span class="o">.</span><span class="n">metricName</span><span class="p">:</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">})</span>
+<span class="n">f1</span>  <span class="o">=</span> <span class="n">multi_eval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="p">{</span><span class="n">multi_eval</span><span class="o">.</span><span class="n">metricName</span><span class="p">:</span> <span class="s2">&quot;f1&quot;</span><span class="p">})</span>
+<span class="n">prec</span><span class="o">=</span> <span class="n">multi_eval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="p">{</span><span class="n">multi_eval</span><span class="o">.</span><span class="n">metricName</span><span class="p">:</span> <span class="s2">&quot;weightedPrecision&quot;</span><span class="p">})</span>
+<span class="n">rec</span> <span class="o">=</span> <span class="n">multi_eval</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="p">{</span><span class="n">multi_eval</span><span class="o">.</span><span class="n">metricName</span><span class="p">:</span> <span class="s2">&quot;weightedRecall&quot;</span><span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC: </span><span class="si">{</span><span class="n">auc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | Accuracy: </span><span class="si">{</span><span class="n">acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | F1: </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | Precision: </span><span class="si">{</span><span class="n">prec</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | Recall: </span><span class="si">{</span><span class="n">rec</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo entrenamiento: </span><span class="si">{</span><span class="n">t_train</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s | Tiempo predicción: </span><span class="si">{</span><span class="n">t_pred</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+<span class="n">pred</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:root:KeyboardInterrupt while sending command.
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 535, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\socket.py&quot;, line 718, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py&quot;, line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 563, in send_command
+    logger.info(&quot;Error while receiving.&quot;, exc_info=True)
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\logging\__init__.py&quot;, line 1479, in info
+    def info(self, msg, *args, **kwargs):
+    
+KeyboardInterrupt
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:py4j.clientserver:Exception occurred while shutting down connection
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 535, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\socket.py&quot;, line 718, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py&quot;, line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 563, in send_command
+    logger.info(&quot;Error while receiving.&quot;, exc_info=True)
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\logging\__init__.py&quot;, line 1479, in info
+    def info(self, msg, *args, **kwargs):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 503, in shutdown_socket
+    self.socket.sendall(&quot;z\n&quot;.encode(&quot;utf-8&quot;))
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ERROR:py4j.clientserver:Exception occurred while shutting down connection
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 535, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\socket.py&quot;, line 718, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py&quot;, line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 563, in send_command
+    logger.info(&quot;Error while receiving.&quot;, exc_info=True)
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\logging\__init__.py&quot;, line 1479, in info
+    def info(self, msg, *args, **kwargs):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;C:\Users\OMAR DANIEL MEDINA V\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py&quot;, line 503, in shutdown_socket
+    self.socket.sendall(&quot;z\n&quot;.encode(&quot;utf-8&quot;))
+ConnectionResetError: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ConnectionResetError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py:535,</span> in <span class="ni">ClientServerConnection.send_command</span><span class="nt">(self, command)</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">535</span>     <span class="n">answer</span> <span class="o">=</span> <span class="n">smart_decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">readline</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Answer received: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\socket.py:718,</span> in <span class="ni">SocketIO.readinto</span><span class="nt">(self, b)</span>
+<span class="g g-Whitespace">    </span><span class="mi">717</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">718</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sock</span><span class="o">.</span><span class="n">recv_into</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">719</span> <span class="k">except</span> <span class="n">timeout</span><span class="p">:</span>
+
+<span class="ne">ConnectionResetError</span>: [WinError 10054] Se ha forzado la interrupción de una conexión existente por el host remoto
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">26</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="n">labelCol</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">featuresCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">weightCol</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>     <span class="mi">22</span>     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">26</span> <span class="n">rf_model</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_w</span><span class="p">)</span>                 <span class="c1"># &lt;&lt;&lt; aquí</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="n">t_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\base.py:203,</span> in <span class="ni">Estimator.fit</span><span class="nt">(self, dataset, params)</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">203</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>         <span class="s2">&quot;Params must be either a param map or a list/tuple of param maps, &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>         <span class="s2">&quot;but got </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\util.py:164,</span> in <span class="ni">try_remote_fit.&lt;locals&gt;.wrapped</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">162</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copyValues</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">164</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\wrapper.py:411,</span> in <span class="ni">JavaEstimator._fit</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span> <span class="nd">@try_remote_fit</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span> <span class="k">def</span><span class="w"> </span><span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JM</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">411</span>     <span class="n">java_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_java</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_model</span><span class="p">(</span><span class="n">java_model</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_copyValues</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\ml\wrapper.py:407,</span> in <span class="ni">JavaEstimator._fit_java</span><span class="nt">(self, dataset)</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_java_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transfer_params_to_java</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">407</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_java_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">_jdf</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1361,</span> in <span class="ni">JavaMember.__call__</span><span class="nt">(self, *args)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1354</span> <span class="n">args_command</span><span class="p">,</span> <span class="n">temp_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1356</span> <span class="n">command</span> <span class="o">=</span> <span class="n">proto</span><span class="o">.</span><span class="n">CALL_COMMAND_NAME</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1357</span>     <span class="bp">self</span><span class="o">.</span><span class="n">command_header</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1358</span>     <span class="n">args_command</span> <span class="o">+</span>\
+<span class="g g-Whitespace">   </span><span class="mi">1359</span>     <span class="n">proto</span><span class="o">.</span><span class="n">END_COMMAND_PART</span>
+<span class="ne">-&gt; </span><span class="mi">1361</span> <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1362</span> <span class="n">return_value</span> <span class="o">=</span> <span class="n">get_return_value</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1363</span>     <span class="n">answer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1365</span> <span class="k">for</span> <span class="n">temp_arg</span> <span class="ow">in</span> <span class="n">temp_args</span><span class="p">:</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1038,</span> in <span class="ni">GatewayClient.send_command</span><span class="nt">(self, command, retry, binary)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1036</span> <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1037</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1038</span>     <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1039</span>     <span class="k">if</span> <span class="n">binary</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1040</span>         <span class="k">return</span> <span class="n">response</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_connection_guard</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\clientserver.py:563,</span> in <span class="ni">ClientServerConnection.send_command</span><span class="nt">(self, command)</span>
+<span class="g g-Whitespace">    </span><span class="mi">560</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">561</span>                     <span class="n">proto</span><span class="o">.</span><span class="n">ERROR_RETURN_MESSAGE</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">562</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">563</span>     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Error while receiving.&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">564</span>     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">Py4JNetworkError</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">when</span> <span class="o">==</span> <span class="n">proto</span><span class="o">.</span><span class="n">EMPTY_RESPONSE</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">565</span>         <span class="k">raise</span>
+
+<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\logging\__init__.py:1479,</span> in <span class="ni">Logger.info</span><span class="nt">(self, msg, *args, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1476</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1477</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1479</span> <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1480</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1481</span><span class="sd">     Log &#39;msg % args&#39; with severity &#39;INFO&#39;.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1482</span><span class="sd"> </span>
+<span class="sd">   (...)   1486     logger.info(&quot;Houston, we have a %s&quot;, &quot;interesting problem&quot;, exc_info=True)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1487</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1488</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">INFO</span><span class="p">):</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="matriz-de-confusion-y-curva-auc">
+<h2>3.2 Matriz de confusión y Curva-AUC<a class="headerlink" href="#matriz-de-confusion-y-curva-auc" title="Link to this heading">#</a></h2>
+<p>Para facilitar la interpretación de los resultados del modelo, se optó por graficar la matriz de confusión y la curva ROC-AUC utilizando Scikit-learn. Es importante destacar que esta librería se empleó únicamente como apoyo para la visualización e interpretación, las predicciones provinieron directamente de nuestro modelo desarrollado en PySpark .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Traer a pandas solo y_true e y_pred</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred</span>
+       <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;prediction&quot;</span><span class="p">)</span>   <span class="c1"># solo 2 cols</span>
+       <span class="o">.</span><span class="n">toPandas</span><span class="p">())</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">[</span><span class="s2">&quot;prediction&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># 2) Matriz de confusión</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="p">)</span>
+
+<span class="c1"># 3) (Opcional) normalizada por filas</span>
+<span class="n">cm_norm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion matrix (normalizada):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cm_norm</span><span class="p">)</span>
+
+<span class="c1"># 4) Heatmap bonito</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">,</span>
+            <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Predicción&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Real&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Matriz de confusión&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 5) Reporte sklearn (precisión/recall/F1 por clase)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Confusion matrix:
+ [[130320  85237]
+ [ 16943  36575]]
+Confusion matrix (normalizada):
+ [[0.60457327 0.39542673]
+ [0.31658507 0.68341493]]
+</pre></div>
+</div>
+<img alt="_images/e4f6f9b1b5c9c80fd9ace6ce276dcf2f9d456b79e661dcb4a1d7259b685e1259.png" src="_images/e4f6f9b1b5c9c80fd9ace6ce276dcf2f9d456b79e661dcb4a1d7259b685e1259.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           0     0.8849    0.6046    0.7184    215557
+           1     0.3003    0.6834    0.4172     53518
+
+    accuracy                         0.6203    269075
+   macro avg     0.5926    0.6440    0.5678    269075
+weighted avg     0.7687    0.6203    0.6585    269075
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+<span class="c1"># 1) Traer probas del modelo</span>
+<span class="n">pdf_proba</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred</span>
+             <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;probability&quot;</span><span class="p">)</span>  <span class="c1"># la col probas de PySpark</span>
+             <span class="o">.</span><span class="n">toPandas</span><span class="p">())</span>
+
+<span class="c1"># Spark guarda &quot;probability&quot; como vector -&gt; tomamos prob de la clase 1</span>
+<span class="n">pdf_proba</span><span class="p">[</span><span class="s2">&quot;prob_1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdf_proba</span><span class="p">[</span><span class="s2">&quot;probability&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">pdf_proba</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">y_score</span> <span class="o">=</span> <span class="n">pdf_proba</span><span class="p">[</span><span class="s2">&quot;prob_1&quot;</span><span class="p">]</span>
+
+<span class="c1"># 2) Calcular fpr, tpr y auc</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+
+<span class="c1"># 3) Graficar curva ROC</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ROC curve (AUC = </span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;False Positive Rate&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;True Positive Rate&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Curva ROC&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7164d8ef6824acf6d183f18909920e3d2c11ad3418570c30a83e058860758335.png" src="_images/7164d8ef6824acf6d183f18909920e3d2c11ad3418570c30a83e058860758335.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-de-resultados">
+<h2>Interpretación de resultados<a class="headerlink" href="#interpretacion-de-resultados" title="Link to this heading">#</a></h2>
+</section>
+<section id="matriz-de-confusion">
+<h2>1. Matriz de Confusión<a class="headerlink" href="#matriz-de-confusion" title="Link to this heading">#</a></h2>
+<p>Podemos observar que con la matriz de confusión el modelo muestra un mejor desempeño identificando la <strong>clase 0</strong>, mientras que en la <strong>clase 1</strong> se observa aun una confusión considerable, sin embargo cabe recalcar que para el desbalanceo de clases que existe en los datos el modelo logra captar una cantidad considerable de la clase minoritaria (verdaderos positivos).</p>
+</section>
+<hr class="docutils" />
+<section id="metricas-de-clasificacion">
+<h2>2. Métricas de Clasificación<a class="headerlink" href="#metricas-de-clasificacion" title="Link to this heading">#</a></h2>
+<p>El recall de la clase 1 es mayor que su precisión, lo que significa que el modelo tiende a detectar más casos positivos, aunque con un alto costo de falsos positivos. Esto resulta valioso en escenarios como este, donde es prioritario no dejar escapar a los positivos (personas que realmente no pagarán), incluso a costa de perder precisión. Además, es importante recordar que en contextos con un fuerte desbalance de clases, la métrica de accuracy puede ser engañosa, ya que se ve influenciada principalmente por la clase mayoritaria.</p>
+</section>
+<hr class="docutils" />
+<section id="curva-roc-auc">
+<h2>3. Curva ROC – AUC<a class="headerlink" href="#curva-roc-auc" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>AUC = 0.6994</strong>, lo cual indica un desempeño <strong>moderado</strong>.</p></li>
+<li><p>La curva ROC está por encima de la diagonal aleatoria, confirmando que el modelo es <strong>mejor que el azar</strong>, pero aún con margen de mejora.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="conclusion">
+<h2>Conclusión<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>El modelo tiene un <strong>buen desempeño en la clase mayoritaria (0)</strong> y logra capturar un porcentaje aceptable de la <strong>clase minoritaria (1)</strong>, aunque con baja precisión. Esto refleja la dificultad de clasificar correctamente los casos positivos en un contexto de <strong>desbalance de clases</strong>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modScikit.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">1. IMPORTACIÓN DE LIBRERÍAS PARA MODELADO</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="reflexion.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Comparación de Resultados: PySpark vs Scikit-learn</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Modelado utilizando Pyspark</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preparacion-y-division-de-los-datos">2. Preparación y División de los Datos</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-caracteristicas">2.1. Selección de Características</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#division-estratificada-de-datos-80-20">2.2. División Estratificada de Datos (80/20)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-de-los-datos">2.3. Preprocesamiento de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo-y-tiempo-del-modelo">3.1. Entrenamiento del modelo y tiempo del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion-y-curva-auc">3.2 Matriz de confusión y Curva-AUC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-resultados">Interpretación de resultados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">1. Matriz de Confusión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-de-clasificacion">2. Métricas de Clasificación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc-auc">3. Curva ROC – AUC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Omar Medina y Andrés España
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -39,6 +39,13 @@ En general PySpark presenta una sobrecarga de cómputo al trabajar en un entorno
 
 ---
 
-## 📌 Conclusión
-- **PySpark:** más adecuado si se busca **minimizar falsos positivos** y trabajar con grandes volúmenes de datos, a costa de mayor tiempo de cómputo.  
-- **Scikit-learn:** más eficiente en tiempo y con mejor **recall en la clase 1 (default)**, lo que lo hace útil en escenarios donde lo más importante es **no dejar escapar a clientes que no pagarán**.  
+##  Conclusión
+  En este experimento se evidenció que scikit-learn obtuvo un desempeño ligeramente más rápido que PySpark, a pesar de que en teoría Spark está diseñado para optimizar procesos mediante paralelismo y cómputo distribuido. La explicación está en la forma en que se trabajó con cada entorno:
+
+  Con scikit-learn se aplicaron múltiples etapas adicionales (preprocesamiento con imputación y escalado, codificación de variables categóricas, undersampling para balancear las clases y optimización de hiperparámetros con GridSearchCV y validación cruzada en paralelo).
+
+  Con PySpark, en contraste, únicamente se corrió un modelo básico de RandomForest con un pipeline estándar, sin validación cruzada ni optimización de parámetros, y ejecutado en un entorno local sin clúster real.
+
+  Bajo estas condiciones, y dado que el dataset (~1.3 millones de registros, 9 variables) aún es de un tamaño que cabe en memoria, scikit-learn aprovecha su implementación en C y la ausencia de overhead distribuido para responder más rápido. Spark, en cambio, incurre en costos adicionales de arranque, que no se compensan en este escenario al no contar con un clúster ni con un volumen de datos realmente masivo.
+
+  En general, PySpark debería ser más eficiente en problemas a gran escala o cuando los datos no caben en memoria de una sola máquina, mientras que scikit-learn resulta más adecuado en contextos medianos o pequeños, donde la simplicidad y la velocidad local superan la sobrecarga del motor distribuido. 

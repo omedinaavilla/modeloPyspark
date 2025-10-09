@@ -25,29 +25,63 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import pandas as pd
-import missingno as msno
-import matplotlib.pyplot as plt
-import numpy as np
-from pyspark.ml.feature import Imputer
-import pyspark.sql.functions as F
-from pyspark.sql import functions as F
-from pyspark.sql import types as T
-from pyspark.sql.types import *
-import seaborn as sns
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, count, countDistinct, isnan, when, avg, min, max, stddev
 
+spark = SparkSession.builder \
+    .appName("Exploratorio_PySpark") \
+    .getOrCreate()
+
+# Leer CSV con encabezados e inferencia de tipos
+df = spark.read.csv("/kaggle/input/kikipyspark/accepted_2007_to_2018Q4.csv", 
+                    header=True, 
+                    inferSchema=True)
+spark.sparkContext.setLogLevel("ERROR")
+# Vista rápida
+# Mostrar solo algunas columnas y pocas filas
+df.select("loan_amnt", "int_rate", "term", "grade", "loan_status").show(20, truncate=False)
 ------------------
 
 
 [31m---------------------------------------------------------------------------[39m
-[31mModuleNotFoundError[39m                       Traceback (most recent call last)
-[36mCell[39m[36m [39m[32mIn[2][39m[32m, line 2[39m
-[32m      1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mpd[39;00m
-[32m----> [39m[32m2[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mmissingno[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mmsno[39;00m
-[32m      3[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mmatplotlib[39;00m[34;01m.[39;00m[34;01mpyplot[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mplt[39;00m
-[32m      4[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mnumpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mnp[39;00m
+[31mAnalysisException[39m                         Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[3][39m[32m, line 8[39m
+[32m      3[39m spark = SparkSession.builder \
+[32m      4[39m     .appName([33m"[39m[33mExploratorio_PySpark[39m[33m"[39m) \
+[32m      5[39m     .getOrCreate()
+[32m      7[39m [38;5;66;03m# Leer CSV con encabezados e inferencia de tipos[39;00m
+[32m----> [39m[32m8[39m df = [43mspark[49m[43m.[49m[43mread[49m[43m.[49m[43mcsv[49m[43m([49m[33;43m"[39;49m[33;43m/kaggle/input/kikipyspark/accepted_2007_to_2018Q4.csv[39;49m[33;43m"[39;49m[43m,[49m[43m [49m
+[32m      9[39m [43m                    [49m[43mheader[49m[43m=[49m[38;5;28;43;01mTrue[39;49;00m[43m,[49m[43m [49m
+[32m     10[39m [43m                    [49m[43minferSchema[49m[43m=[49m[38;5;28;43;01mTrue[39;49;00m[43m)[49m
+[32m     11[39m spark.sparkContext.setLogLevel([33m"[39m[33mERROR[39m[33m"[39m)
+[32m     12[39m [38;5;66;03m# Vista rápida[39;00m
+[32m     13[39m [38;5;66;03m# Mostrar solo algunas columnas y pocas filas[39;00m
 
-[31mModuleNotFoundError[39m: No module named 'missingno'
+[36mFile [39m[32m~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\sql\readwriter.py:838[39m, in [36mDataFrameReader.csv[39m[34m(self, path, schema, sep, encoding, quote, escape, comment, header, inferSchema, ignoreLeadingWhiteSpace, ignoreTrailingWhiteSpace, nullValue, nanValue, positiveInf, negativeInf, dateFormat, timestampFormat, maxColumns, maxCharsPerColumn, maxMalformedLogPerPartition, mode, columnNameOfCorruptRecord, multiLine, charToEscapeQuoteEscaping, samplingRatio, enforceSchema, emptyValue, locale, lineSep, pathGlobFilter, recursiveFileLookup, modifiedBefore, modifiedAfter, unescapedQuoteHandling)[39m
+[32m    836[39m [38;5;28;01mif[39;00m [38;5;28mtype[39m(path) == [38;5;28mlist[39m:
+[32m    837[39m     [38;5;28;01massert[39;00m [38;5;28mself[39m._spark._sc._jvm [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m
+[32m--> [39m[32m838[39m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m._df([38;5;28;43mself[39;49m[43m.[49m[43m_jreader[49m[43m.[49m[43mcsv[49m[43m([49m[38;5;28;43mself[39;49m[43m.[49m[43m_spark[49m[43m.[49m[43m_sc[49m[43m.[49m[43m_jvm[49m[43m.[49m[43mPythonUtils[49m[43m.[49m[43mtoSeq[49m[43m([49m[43mpath[49m[43m)[49m[43m)[49m)
+[32m    840[39m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m is_remote_only():
+[32m    841[39m     [38;5;28;01mfrom[39;00m[38;5;250m [39m[34;01mpyspark[39;00m[34;01m.[39;00m[34;01mcore[39;00m[34;01m.[39;00m[34;01mrdd[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m RDD  [38;5;66;03m# noqa: F401[39;00m
+
+[36mFile [39m[32m~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1362[39m, in [36mJavaMember.__call__[39m[34m(self, *args)[39m
+[32m   1356[39m command = proto.CALL_COMMAND_NAME +\
+[32m   1357[39m     [38;5;28mself[39m.command_header +\
+[32m   1358[39m     args_command +\
+[32m   1359[39m     proto.END_COMMAND_PART
+[32m   1361[39m answer = [38;5;28mself[39m.gateway_client.send_command(command)
+[32m-> [39m[32m1362[39m return_value = [43mget_return_value[49m[43m([49m
+[32m   1363[39m [43m    [49m[43manswer[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mgateway_client[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mtarget_id[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mname[49m[43m)[49m
+[32m   1365[39m [38;5;28;01mfor[39;00m temp_arg [38;5;129;01min[39;00m temp_args:
+[32m   1366[39m     [38;5;28;01mif[39;00m [38;5;28mhasattr[39m(temp_arg, [33m"[39m[33m_detach[39m[33m"[39m):
+
+[36mFile [39m[32m~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\errors\exceptions\captured.py:288[39m, in [36mcapture_sql_exception.<locals>.deco[39m[34m(*a, **kw)[39m
+[32m    284[39m converted = convert_exception(e.java_exception)
+[32m    285[39m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m [38;5;28misinstance[39m(converted, UnknownException):
+[32m    286[39m     [38;5;66;03m# Hide where the exception came from that shows a non-Pythonic[39;00m
+[32m    287[39m     [38;5;66;03m# JVM exception message.[39;00m
+[32m--> [39m[32m288[39m     [38;5;28;01mraise[39;00m converted [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;28;01mNone[39;00m
+[32m    289[39m [38;5;28;01melse[39;00m:
+[32m    290[39m     [38;5;28;01mraise[39;00m
+
+[31mAnalysisException[39m: [PATH_NOT_FOUND] Path does not exist: file:/kaggle/input/kikipyspark/accepted_2007_to_2018Q4.csv. SQLSTATE: 42K03
 

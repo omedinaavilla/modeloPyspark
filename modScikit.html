@@ -454,6 +454,15 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>?25l     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/275.7 kB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+     ━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">112.6/275.7 kB</span> <span class=" -Color -Color-Red">3.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">275.7/275.7 kB</span> <span class=" -Color -Color-Red">3.9 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:00</span>
+?25h  Preparing metadata (setup.py) ... ?25l?25hdone
+  Building wheel for lime (setup.py) ... ?25l?25hdone
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -511,68 +520,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;/content/leanding_cleaned.parquet&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dimensiones del dataset: </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pandas\io\parquet.py:669,</span> in <span class="ni">read_parquet</span><span class="nt">(path, engine, columns, storage_options, use_nullable_dtypes, dtype_backend, filesystem, filters, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">666</span>     <span class="n">use_nullable_dtypes</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">667</span> <span class="n">check_dtype_backend</span><span class="p">(</span><span class="n">dtype_backend</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">669</span> <span class="k">return</span> <span class="n">impl</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">670</span>     <span class="n">path</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">671</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">672</span>     <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">673</span>     <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">674</span>     <span class="n">use_nullable_dtypes</span><span class="o">=</span><span class="n">use_nullable_dtypes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">675</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">676</span>     <span class="n">filesystem</span><span class="o">=</span><span class="n">filesystem</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">677</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">678</span> <span class="p">)</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pandas\io\parquet.py:258,</span> in <span class="ni">PyArrowImpl.read</span><span class="nt">(self, path, columns, filters, use_nullable_dtypes, dtype_backend, storage_options, filesystem, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span> <span class="k">if</span> <span class="n">manager</span> <span class="o">==</span> <span class="s2">&quot;array&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="n">to_pandas_kwargs</span><span class="p">[</span><span class="s2">&quot;split_blocks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">258</span> <span class="n">path_or_handle</span><span class="p">,</span> <span class="n">handles</span><span class="p">,</span> <span class="n">filesystem</span> <span class="o">=</span> <span class="n">_get_path_or_handle</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="n">path</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="n">filesystem</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">pa_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">parquet</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span>         <span class="n">path_or_handle</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">270</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="p">)</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pandas\io\parquet.py:141,</span> in <span class="ni">_get_path_or_handle</span><span class="nt">(path, fs, storage_options, mode, is_dir)</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span> <span class="n">handles</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="k">if</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">133</span>     <span class="ow">not</span> <span class="n">fs</span>
-<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_dir</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">139</span>     <span class="c1"># fsspec resources can also point to directories</span>
-<span class="g g-Whitespace">    </span><span class="mi">140</span>     <span class="c1"># this branch is used for example when reading from non-fsspec URLs</span>
-<span class="ne">--&gt; </span><span class="mi">141</span>     <span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">142</span>         <span class="n">path_or_handle</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">is_text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span>
-<span class="g g-Whitespace">    </span><span class="mi">143</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">144</span>     <span class="n">fs</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">145</span>     <span class="n">path_or_handle</span> <span class="o">=</span> <span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pandas\io\common.py:882,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
-<span class="ne">--&gt; </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">883</span>     <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">885</span> <span class="c1"># Convert BytesIO or file objects passed with an encoding</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/content/leanding_cleaned.parquet&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dimensiones del dataset: (1345310, 10)
 </pre></div>
 </div>
 </div>

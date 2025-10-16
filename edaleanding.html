@@ -433,6 +433,9 @@ document.write(`
 <li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: Fully Paid (el préstamo fue pagado completamente)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Charged Off (el préstamo cayó en default/incumplimiento)</p></li>
 </ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="importacion-de-librerias">
 <h1>2. Importación de librerías<a class="headerlink" href="#importacion-de-librerias" title="Link to this heading">#</a></h1>
@@ -484,48 +487,34 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AnalysisException</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span> \
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;Exploratorio_PySpark&quot;</span><span class="p">)</span> \
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Leer CSV con encabezados e inferencia de tipos</span>
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="s2">&quot;/kaggle/input/kikipyspark/accepted_2007_to_2018Q4.csv&quot;</span><span class="p">,</span> 
-<span class="g g-Whitespace">      </span><span class="mi">9</span>                     <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-<span class="g g-Whitespace">     </span><span class="mi">10</span>                     <span class="n">inferSchema</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Vista rápida</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># Mostrar solo algunas columnas y pocas filas</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\sql\readwriter.py:838,</span> in <span class="ni">DataFrameReader.csv</span><span class="nt">(self, path, schema, sep, encoding, quote, escape, comment, header, inferSchema, ignoreLeadingWhiteSpace, ignoreTrailingWhiteSpace, nullValue, nanValue, positiveInf, negativeInf, dateFormat, timestampFormat, maxColumns, maxCharsPerColumn, maxMalformedLogPerPartition, mode, columnNameOfCorruptRecord, multiLine, charToEscapeQuoteEscaping, samplingRatio, enforceSchema, emptyValue, locale, lineSep, pathGlobFilter, recursiveFileLookup, modifiedBefore, modifiedAfter, unescapedQuoteHandling)</span>
-<span class="g g-Whitespace">    </span><span class="mi">836</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">837</span>     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spark</span><span class="o">.</span><span class="n">_sc</span><span class="o">.</span><span class="n">_jvm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">838</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jreader</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spark</span><span class="o">.</span><span class="n">_sc</span><span class="o">.</span><span class="n">_jvm</span><span class="o">.</span><span class="n">PythonUtils</span><span class="o">.</span><span class="n">toSeq</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
-<span class="g g-Whitespace">    </span><span class="mi">840</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_remote_only</span><span class="p">():</span>
-<span class="g g-Whitespace">    </span><span class="mi">841</span>     <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.core.rdd</span><span class="w"> </span><span class="kn">import</span> <span class="n">RDD</span>  <span class="c1"># noqa: F401</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\py4j\java_gateway.py:1362,</span> in <span class="ni">JavaMember.__call__</span><span class="nt">(self, *args)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1356</span> <span class="n">command</span> <span class="o">=</span> <span class="n">proto</span><span class="o">.</span><span class="n">CALL_COMMAND_NAME</span> <span class="o">+</span>\
-<span class="g g-Whitespace">   </span><span class="mi">1357</span>     <span class="bp">self</span><span class="o">.</span><span class="n">command_header</span> <span class="o">+</span>\
-<span class="g g-Whitespace">   </span><span class="mi">1358</span>     <span class="n">args_command</span> <span class="o">+</span>\
-<span class="g g-Whitespace">   </span><span class="mi">1359</span>     <span class="n">proto</span><span class="o">.</span><span class="n">END_COMMAND_PART</span>
-<span class="g g-Whitespace">   </span><span class="mi">1361</span> <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1362</span> <span class="n">return_value</span> <span class="o">=</span> <span class="n">get_return_value</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1363</span>     <span class="n">answer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gateway_client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1365</span> <span class="k">for</span> <span class="n">temp_arg</span> <span class="ow">in</span> <span class="n">temp_args</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1366</span>     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">temp_arg</span><span class="p">,</span> <span class="s2">&quot;_detach&quot;</span><span class="p">):</span>
-
-<span class="nn">File ~\anaconda3\envs\ml_venv\Lib\site-packages\pyspark\errors\exceptions\captured.py:288,</span> in <span class="ni">capture_sql_exception.&lt;locals&gt;.deco</span><span class="nt">(*a, **kw)</span>
-<span class="g g-Whitespace">    </span><span class="mi">284</span> <span class="n">converted</span> <span class="o">=</span> <span class="n">convert_exception</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">java_exception</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">285</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">converted</span><span class="p">,</span> <span class="n">UnknownException</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">286</span>     <span class="c1"># Hide where the exception came from that shows a non-Pythonic</span>
-<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="c1"># JVM exception message.</span>
-<span class="ne">--&gt; </span><span class="mi">288</span>     <span class="k">raise</span> <span class="n">converted</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">289</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">290</span>     <span class="k">raise</span>
-
-<span class="ne">AnalysisException</span>: [PATH_NOT_FOUND] Path does not exist: file:/kaggle/input/kikipyspark/accepted_2007_to_2018Q4.csv. SQLSTATE: 42K03
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                                                                                
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+---------+--------+----------+-----+-----------+
+|loan_amnt|int_rate|term      |grade|loan_status|
++---------+--------+----------+-----+-----------+
+|3600.0   |13.99   | 36 months|C    |Fully Paid |
+|24700.0  |11.99   | 36 months|C    |Fully Paid |
+|20000.0  |10.78   | 60 months|B    |Fully Paid |
+|35000.0  |14.85   | 60 months|C    |Current    |
+|10400.0  |22.45   | 60 months|F    |Fully Paid |
+|11950.0  |13.44   | 36 months|C    |Fully Paid |
+|20000.0  |9.17    | 36 months|B    |Fully Paid |
+|20000.0  |8.49    | 36 months|B    |Fully Paid |
+|10000.0  |6.49    | 36 months|A    |Fully Paid |
+|8000.0   |11.48   | 36 months|B    |Fully Paid |
+|22400.0  |12.88   | 60 months|C    |Current    |
+|16000.0  |12.88   | 60 months|C    |Current    |
+|1400.0   |12.88   | 36 months|C    |Fully Paid |
+|18000.0  |19.48   | 60 months|E    |Charged Off|
+|28000.0  |6.49    | 36 months|A    |Fully Paid |
+|9600.0   |7.49    | 36 months|A    |Fully Paid |
+|25000.0  |7.49    | 36 months|A    |Fully Paid |
+|18000.0  |11.99   | 60 months|C    |Fully Paid |
+|23000.0  |8.49    | 60 months|B    |Current    |
+|8650.0   |19.89   | 36 months|E    |Fully Paid |
++---------+--------+----------+-----+-----------+
+only showing top 20 rows
 </pre></div>
 </div>
 </div>
